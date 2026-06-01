@@ -23,8 +23,8 @@ conn_pg  = psycopg2.connect (
 
 
 
-@!@#$%%^&*("ACCESS_PATH")
+#@!@#$%%^&*("ACCESS_PATH")
 
--=_+]][{{}
-""
+#-=_+]][{{}
+#""
 
