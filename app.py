@@ -24,12 +24,10 @@ def ai_to_sql(pregunta_usuario):
     if MUSE_API_KEY == 'MOCK':
         # queries de ejemplo para probar
         pregunta = pregunta_usuario.lower()
-        if 'infantil' in pregunta :
-            return "SELECT equipo, puntos FROM tabla_infantil ORDER BY goles DESC LIMIT 10;"
-        elif 'goleador' in pregunta or 'goles' in pregunta:
-             return "SELECT jugador, equipo, goles FROM goleadores ORDER BY goles DESC LIMIT 5;"
-        elif 'juvenil' in pregunta :
-             return "SELECT equipo, puntos FROM tabla_juvenil ORDER BY goles DESC LIMIT 10;"
+        if 'equipos' in pregunta :
+            return "SELECT nombre_equipo FROM equipos ORDER BY nombre_equipo DESC LIMIT 10;"
+        elif 'jugador' in pregunta or 'jugadores' in pregunta:
+             return "SELECT id_jugador, nombre FROM jugadores ORDER BY nombre DESC LIMIT 15;"
         else:
             return  "SELECT 'Escribe: tabla infantil, tabla juvenil o goleadores' as mensaje;"
         
@@ -92,7 +90,7 @@ def ejecutar_sql(query):
         
         # Formatear respuesta para whatsapp
         respuesta = ""
-        for fila in filas[:15] # Max 15 filas para no saturar whastapp
+        for fila in filas[:15]: # Max 15 filas para no saturar whastapp
             linea = " | ".join(str(campo) for campo in fila)
             respuesta += linea + "\n"
         return respuesta.strip()
