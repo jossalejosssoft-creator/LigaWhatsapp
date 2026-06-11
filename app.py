@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 app = Flask(__name__)
 
-# vartiables de entorno
+# variables de entorno
 DATABASE_URL = os.environ['DATABASE_URL']
 TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
@@ -34,9 +34,7 @@ def ai_to_sql(pregunta_usuario):
     # aqui va el codigo real con muse spark - lo activamos cuando tengas la key
     # por ahora no se ejecuta por que estamos en MOCK
 
-    prompt = f
-
-    """
+    prompt = f"""
     Eres un experto en PostgrSQL. Convierte esta pregunta a SQL
     Tablas: tabla_infantil (equipo,pj,pg,pe,pp,gf,gc,dg,puntos)
             tabla_juvenil (equipo,pj,pg,pe,pp,gf,gc,dg,puntos)
@@ -57,7 +55,7 @@ def ai_to_sql(pregunta_usuario):
     }
     
     try:
-        res = request.post(
+        res = requests.post(
             "https://api.llama.com/v1/chat/completions",
             headers=headers,
             json=data,
@@ -115,7 +113,7 @@ def whatsapp():
     resp.message(resultado)
 
     return str(resp)
-@app.route("/", methods['GET'])
+@app.route("/", methods=['GET'])
 def home():
     return "Bot Liga WhatsApp activo. MODO: " + ("MOCK" if MUSE_API_KEY == 'MOCK' else "PROD")
 
