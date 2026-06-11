@@ -2,7 +2,7 @@ import os
 import requests
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
-import psycopg
+import psycopg2
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -67,7 +67,7 @@ def ai_to_sql(pregunta_usuario):
     
 def ejecutar_sql(query):
     try:
-        conn = psycopg.connect(DATABASE_URL)
+        conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
         cur.execute(query)
 
