@@ -40,30 +40,26 @@ def ai_to_sql(pregunta_usuario):
     Devuelve solo el SQL, sin explicaciones ni markdown
     Usa ILIKE '%texto%' para buscar equipos sin importar mayusculas
     si no entiendes la pregunta regresa: SELECT 'No entendi la pregunta' as mensaje;
-    
-    pregunta: {pregunta_usuario}
-    
-    """
-    headers = {
-        "Authorization": f"Bearer {MUSE_API_KEY}",
-        "Content-Type": "application/json"
 
-    }
-    data  = {
-        "model": "muse-spark",
-        "messages": [{"role":"user", "content":prompt}],
-        "temperature": 0.1
-    }
+    pregunta: {pregunta_usuario}
+    SQL:
+    """
+    
     
     try:
-        res = requests.post(
-            "https://api.llama.com/v1/chat/completions",
-            headers=headers,
-            json=data,
-            timeout=10
+
+        resp= client.chat.completions.create(
+            model="gtp-4o-mini",
+            messages=[{"role":"user", "content":prompt}],
+            temperature= 0,
+            max_tokens=200
         )
-        return res.json()['choices'][0]['message']['content'].strip()
+        sql = resp.choices[0].message.content.strip()
+        sql = sql.replace("```sql","").strip()
+        print(f"Pregunta: {pregunta_usuario} | SQL: {sql}")
+        return sql
     except Exception as e:
+        print(f"Error OpenAI: {e}")
         return "SELECT 'Error conectando con la IA' as error"
 
 def ejecutar_sql(query):
