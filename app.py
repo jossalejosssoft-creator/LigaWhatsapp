@@ -5,6 +5,10 @@ from twilio.twiml.messaging_response import MessagingResponse
 import psycopg2
 from dotenv import load_dotenv
 
+from openai import OpenAI
+
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
 load_dotenv()
 app = Flask(__name__)
 
@@ -18,30 +22,27 @@ MUSE_API_KEY = os.environ.get('MUSE_API_KEY', 'MOCK')
 def ai_to_sql(pregunta_usuario):
     """
     Convierte lenguaje natural a SQL
-    MODO MOCK: devuelve queries de ejemplo para que pruebes el flujo sin API key
     """
 
-    if MUSE_API_KEY == 'MOCK':
-        # queries de ejemplo para probar
-        pregunta = pregunta_usuario.lower()
-        if 'equipos' in pregunta :
-            return "SELECT nombre_equipo FROM equipos ORDER BY nombre_equipo DESC LIMIT 10;"
-        elif 'jugador' in pregunta or 'jugadores' in pregunta:
-             return "SELECT id_jugador, nombre FROM jugadores ORDER BY nombre DESC LIMIT 15;"
-        else:
-            return  "SELECT 'Escribe: tabla infantil, tabla juvenil o goleadores' as mensaje;"
+   
         
     # aqui va el codigo real con muse spark - lo activamos cuando tengas la key
     # por ahora no se ejecuta por que estamos en MOCK
 
-    prompt = f"""
-    Eres un experto en PostgrSQL. Convierte esta pregunta a SQL
-    Tablas: tabla_infantil (equipo,pj,pg,pe,pp,gf,gc,dg,puntos)
-            tabla_juvenil (equipo,pj,pg,pe,pp,gf,gc,dg,puntos)
-            goleadores(jugador, equipo, goles)
+    prompt = f"""Eres un experto en PostgrSQL para una liga de futbol infantil en Mexico. Convierte esta pregunta a SQL
+    Tablas disponibles: equipos (id_equipo,nombre_equipo,grupo,id_categoria)
+            jugadores (id_jugador,nombre,id_equipo)
+            categorias(id_categorias, nombre_categoria)
 
-    pregunta: {pregunta_usuario}
+    id_categoria en la tabla equipos es la llave foranea que la relaciona con la tabla categorias
+    id_equipo en la tabla jugadores es la llave foranea que la relaciona con la tabla equipos     
+
     Devuelve solo el SQL, sin explicaciones ni markdown
+    Usa ILIKE '%texto%' para buscar equipos sin importar mayusculas
+    si no entiendes la pregunta regresa: SELECT 'No entendi la pregunta' as mensaje;
+    
+    pregunta: {pregunta_usuario}
+    
     """
     headers = {
         "Authorization": f"Bearer {MUSE_API_KEY}",
@@ -64,7 +65,7 @@ def ai_to_sql(pregunta_usuario):
         return res.json()['choices'][0]['message']['content'].strip()
     except Exception as e:
         return "SELECT 'Error conectando con la IA' as error"
-    
+
 def ejecutar_sql(query):
     try:
         conn = psycopg2.connect(DATABASE_URL)
