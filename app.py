@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from openai import OpenAI
 
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
 
 load_dotenv()
 app = Flask(__name__)
@@ -16,8 +16,9 @@ app = Flask(__name__)
 DATABASE_URL = os.environ['DATABASE_URL']
 TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
-MUSE_API_KEY = os.environ.get('MUSE_API_KEY', 'MOCK')
+#MUSE_API_KEY = os.environ.get('MUSE_API_KEY', 'MOCK')
 
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 def ai_to_sql(pregunta_usuario):
     """
@@ -49,17 +50,17 @@ def ai_to_sql(pregunta_usuario):
     try:
 
         resp= client.chat.completions.create(
-            model="gtp-4o-mini",
+            model="gpt-4o-mini",
             messages=[{"role":"user", "content":prompt}],
             temperature= 0,
             max_tokens=200
         )
         sql = resp.choices[0].message.content.strip()
-        sql = sql.replace("```sql","").strip()
+        sql = sql.replace("```sql","").replace("```","").strip()
         print(f"Pregunta: {pregunta_usuario} | SQL: {sql}")
         return sql
     except Exception as e:
-        print(f"Error OpenAI: {e}")
+        print(f"Error OpenAI detallado: {type(e).__name__}: {e}")
         return "SELECT 'Error conectando con la IA' as error"
 
 def ejecutar_sql(query):
