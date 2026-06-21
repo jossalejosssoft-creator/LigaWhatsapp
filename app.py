@@ -88,7 +88,7 @@ def ejecutar_sql(query):
         
         # Formatear respuesta para whatsapp
         respuesta = ""
-        for fila in filas[:15]: # Max 15 filas para no saturar whastapp
+        for fila in filas[:50]: # Max 15 filas para no saturar whastapp
             linea = " | ".join(str(campo) for campo in fila)
             respuesta += linea + "\n"
         return respuesta.strip()
