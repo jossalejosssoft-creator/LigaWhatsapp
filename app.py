@@ -50,7 +50,7 @@ def ai_to_sql(pregunta_usuario):
     try:
 
         resp= client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="llama-3.1-8b-instant",
             messages=[{"role":"user", "content":prompt}],
             temperature= 0,
             max_tokens=200
@@ -60,7 +60,7 @@ def ai_to_sql(pregunta_usuario):
         print(f"Pregunta: {pregunta_usuario} | SQL: {sql}")
         return sql
     except Exception as e:
-        print(f"Error OpenAI detallado: {type(e).__name__}: {e}")
+        print(f"Error Groq detallado: {type(e).__name__}: {e}")
         return "SELECT 'Error conectando con la IA' as error"
 
 def ejecutar_sql(query):
