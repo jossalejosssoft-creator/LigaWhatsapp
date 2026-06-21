@@ -1,11 +1,10 @@
 import os
-import requests
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 import psycopg2
 from dotenv import load_dotenv
 
-from openai import OpenAI
+from groq import Groq
 
 
 
@@ -18,7 +17,8 @@ TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
 #MUSE_API_KEY = os.environ.get('MUSE_API_KEY', 'MOCK')
 
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+#client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 def ai_to_sql(pregunta_usuario):
     """
