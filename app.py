@@ -35,7 +35,9 @@ def ai_to_sql(pregunta_usuario):
             jugadores (id_jugador,nombre,id_equipo)
             categorias(id_categoria, nombre_categoria)
 
-    id_categoria en la tabla equipos es la llave foranea que la relaciona con la tabla categorias
+    Estas son las relaciones de las tablas        
+    id_categoria en la tabla equipos es la llave foranea que la relaciona con la tabla categorias, la clave de la categoria
+    es id_categoria y el nombre de la categoria es nombre_categoria
     id_equipo en la tabla jugadores es la llave foranea que la relaciona con la tabla equipos     
 
     Devuelve solo el SQL, sin explicaciones ni markdown
