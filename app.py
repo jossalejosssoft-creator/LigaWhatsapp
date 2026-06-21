@@ -33,7 +33,7 @@ def ai_to_sql(pregunta_usuario):
     prompt = f"""Eres un experto en PostgrSQL para una liga de futbol infantil en Mexico. Convierte esta pregunta a SQL
     Tablas disponibles: equipos (id_equipo,nombre_equipo,grupo,id_categoria)
             jugadores (id_jugador,nombre,id_equipo)
-            categorias(id_categorias, nombre_categoria)
+            categorias(id_categoria, nombre_categoria)
 
     id_categoria en la tabla equipos es la llave foranea que la relaciona con la tabla categorias
     id_equipo en la tabla jugadores es la llave foranea que la relaciona con la tabla equipos     
